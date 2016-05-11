@@ -1,0 +1,21 @@
+{% extends "base.html" %}
+{% load staticfiles %}
+
+{% block title %}Главная{% endblock %}
+
+{% block main_page %}
+
+	{% for country in countries %}
+		{{country.id}} {{country.name}} {{country.likes_count}} </br>
+	{% endfor %}
+	</br></br>
+	{% for city in cities %}
+		{{city.id}} {{city.name}} {{city.likes_count}} </br>
+	{% endfor %}
+	</br></br>
+	{% for tag in tags %}
+		{{tag.text}} {{tag.count_tags}} </br>
+	{% endfor %}
+	<script src="{% static "js/myjs.js" %}"></script>
+
+{% endblock %}

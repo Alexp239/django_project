@@ -1,0 +1,291 @@
+<!DOCTYPE html>	
+<html lang="ru">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
+    <title>Санкт-Петербург</title>
+		{% load staticfiles %}
+    <!-- Bootstrap -->
+    <link href="{% static "css/bootstrap.css" %}" rel="stylesheet">
+    <link href="{% static "css/style.css" %}" rel="stylesheet">
+
+    <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+      <script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
+      <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+    <![endif]-->
+  </head>
+  
+  <body clas="body">
+   
+    <!-- Navigation -->
+    <nav class="navbar navbar-default" role="navigation">
+      <div class="container-fluid">
+        <!-- Brand and toggle get grouped for better mobile display -->
+        <div class="navbar-header">
+          <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+              <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+              </button>
+          <a class="navbar-brand" href="index.html">My site</a>
+        </div>
+
+        <!-- Collect the nav links, forms, and other content for toggling -->
+        <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1" color = blue>
+          <ul class="nav navbar-nav">
+            <li><a href="index.html">Главная</a></li>
+            <li><a href="contries.html">Страны</a></li>
+            <li><a href="#">Контакты</a></li>
+          </ul>
+          
+          <form class="navbar-search pull-right">
+            <input type="text" class="search-query" placeholder="Search">
+            <button type="submit" class="btn" id ="search-btn"><i class="glyphicon glyphicon-search"></i></button>
+          </form>
+        </div><!-- /.navbar-collapse -->
+        
+        <ol class="breadcrumb">
+          <li><a href="index.html">Главная</a></li>
+					<li><a href="contries.html">Страны</a></li>
+          <li><a href="#">{{city.country}}</a></li>
+					<li class=active>{{city.name}}</li>
+        </ol>
+        
+      </div><!-- /.container-fluid -->
+    </nav>
+   
+   <!-- Main page -->
+   <div class = "container-fluid">
+     <div class="row-fluid">
+      <img src="{% static "images/header.jpg" %}" class="img-rounded" alt="" id="header">
+     </div>
+     
+		 <div class="row">
+				<!-- Left column -->
+				<div class="col-sm-2">
+						<div class="profile-sidebar">
+							<!-- SIDEBAR USERPIC -->
+							<div class="profile-userpic">
+								<img src="{% static "images/no_photo.jpg" %}" class="img-responsive" alt="">
+							</div>
+							<!-- END SIDEBAR USERPIC -->
+							<!-- SIDEBAR USER TITLE -->
+							<div class="profile-usertitle">
+								<div class="profile-usertitle-name">
+									Александр Портной
+								</div>
+							</div>
+							<!-- END SIDEBAR USER TITLE -->
+
+							<!-- SIDEBAR MENU -->
+							<div class="profile-usermenu">
+								<ul class="nav">
+									<li>
+										<a href="../profile">
+										<i class="glyphicon glyphicon-home"></i>
+										Профиль </a>
+									</li>
+									<li>
+										<a href="#">
+										<i class="glyphicon glyphicon-envelope"></i>
+										Сообщения <span class="badge">4</span></a>
+									</li>
+									<li>
+										<a href="#">
+										<i class="glyphicon glyphicon-cog"></i>
+										Настройки </a>
+									</li>
+								</ul>
+							</div>
+							<!-- END MENU -->
+							<!-- SIDEBAR BUTTONS -->
+
+							<div class="profile-userbuttons">
+								<button type="button" class="btn btn-primary">Выйти</button>
+							</div>
+
+							<!-- END SIDEBAR BUTTONS -->
+						</div>
+
+				</div>
+
+				<!-- Right column -->
+				<div class="col-sm-10">
+					<div class="row">
+						<div class="col-md-offset-1 col-md-10">
+							<span class="name-center"><h2 id="header-color">{{city.name}}, {{city.country}}, {{city.id}}</h2></span>          
+							<div class="row">
+
+								<div class="col-md-4">
+									<img class="media-object" src="{% static "images/spb.jpg" %}" id="main-pic" alt="">	
+								</div>
+								<div class="col-md-8">
+								<h4 id="text-main-color">
+									{{city.description}}
+								</h4>
+								</div>
+
+
+							</div>
+							
+							<div class="row">
+								<div class = "buttons">
+									<a class="btn icon-btn btn-primary" href="#">
+										<span class="glyphicon btn-glyphicon glyphicon-thumbs-up img-circle text-primary"><b>{{likes}}</b></span>
+											Like
+									</a>
+									<a class="btn icon-btn btn-success" href="#">
+										<span class="glyphicon btn-glyphicon glyphicon-plus img-circle text-success"></span>
+											Add
+									</a>	
+									<a class="btn icon-btn btn-primary" href="#" data-toggle="modal" data-target="#registrationModal">
+										<span class="glyphicon btn-glyphicon glyphicon-envelope img-circle text-info"></span>
+											Comment
+									</a>
+
+									<div class="modal fade" id="registrationModal" tabindex="-1" role="dialog">
+									 <div class="modal-dialog">
+										 <div class="modal-content">
+												<div class="modal-header">
+													<div class="name-center">
+													 <button class="close" type="button" data-dismiss="modal">x</button>
+													 <h4 class="modal-title" id="myModalLabel">Комментарий</h4>
+													</div>
+												</div>
+												<div class="modal-body">
+													<textarea class="form-control" rows="3"></textarea>
+												</div>
+
+												<div class="modal-footer">
+													<button class="btn btn-primary" type="button">Написать</button></div>
+												</div>
+										</div>
+									</div>		
+								</div>				
+							</div>
+
+							<div class="row">
+								<div class="bs-callout bs-callout-danger">
+									<div class="menu-header">Ближайшие поездки</div>
+									<span>
+										{% if trips %}	
+											<table class="table table-bordered">
+												<thead>
+													<tr>
+														<th>Название</th>
+														<th>Дата начала</th>
+														<th>Дата конца</th>
+														<th>Участники</th>
+														<th>Набор</th>
+													</tr>
+												</thead>
+												<tbody>
+													{% for trip, person in arr %}
+														<tr>
+															<th>{{trip.name}}</th>
+															<th>{{trip.date_start}}</th>
+															<th>{{trip.date_end}}</th>
+															<th>{% for pers in person %}
+																		{{pers.person}}, 
+																	{% endfor %}
+															</th>
+															
+															<th>{{trip.open_flag}}</th>
+														</tr>															
+													{% endfor %}
+												</tbody>
+											</table>
+										{% else %}
+											<p id="text-main-color">No trips.</p>
+										{% endif %}
+									</span>
+								</div>
+								<div class="bs-callout bs-callout-danger">
+									<div class="menu-header">Комметарии</div>
+
+									<div class="row">
+										<div class="blog-comment">									
+											<ul class="comments">
+												
+												{% if comments %}
+													{% for comment in comments %}
+														<li class="clearfix">
+															<div class="profile-userpic">
+																<img src="{% static "images/no_photo.jpg" %}" class="avatar" alt="">
+															</div>
+															<div class="post-comments">
+																	<p class="meta"> {{comment.time}} <a href="#">{{comment.person}}</a> 
+																	{% if comment.comment_id %}
+																		replies <a href="#">{{comment.comment_id}}</a> :
+																	{% else %}says : 
+																	{% endif %}
+																	<i class="pull-right"><a href="#"><small>Reply</small></a></i></p>
+																	<p>
+																			{{comment.text}}
+																	</p>
+															</div>
+														</li>
+													{% endfor %}
+<!--
+													<li class="clearfix">
+														<div class="profile-userpic">
+															<img src="{% static "images/no_photo.jpg" %}" class="avatar" alt="">
+														</div>
+														<div class="post-comments">
+																<p class="meta">Dec 19, 2014 <a href="#">JohnDoe</a> says : <i class="pull-right"><a href="#"><small>Reply</small></a></i></p>
+																<p>
+																		Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+																		Etiam a sapien odio, sit amet
+																</p>
+														</div>
+													</li>-->
+												{% else %}
+													<p id="text-main-color">No trips.</p>
+												{% endif %}
+											</ul>
+										</div>
+									</div>
+									<!--
+									<span class="menu-header">Отзывы</span>
+									{% for com in comments %}
+											<div class="bs-callout bs-callout-danger">{{com.person.last_name}} {{com.person.first_name}}: {{ com.text }}</div>
+									{% empty %}
+											<p>No comments.</p>
+									{% endfor %}-->
+								</div>
+
+								<div class="bs-callout bs-callout-danger">
+									<div class="menu-header">Тэги</div>
+										{% for tag in tags %}
+												<div id="text-main-color">{{ tag.text }}</div>
+										{% empty %}
+												<p>No tags.</p>
+										{% endfor %}
+								</div>
+							</div>
+					  </div>
+					</div>
+				</div>
+		 </div>
+   </div>
+   
+   <!-- Footer -->
+   <div class="container-fluid" id="footer">
+       <footer class="pull-left footer">
+        <p class="col-md-12">
+            <hr class="divider">
+            Copyright &COPY; 2015 <a href="#">Alexander Portnoy</a>
+        </p>
+       </footer>
+   </div>
+   
+    <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
+    <!--<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.js"></script>
+    <script src="../js/bootstrap.js"></script> -->
+  </body>
+</html>

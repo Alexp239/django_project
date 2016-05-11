@@ -1,0 +1,87 @@
+{% extends "base.html" %}
+{% load staticfiles %}
+
+{% block title %}Страны{% endblock %}
+
+{% block main_page %}
+	<span  class="name-center">
+		<h2 id="header-color"><b>Выберите страну</b></h2>
+	</span>
+
+	<table class="table table-bordered">
+		<thead>
+			<tr>
+				<th>Страна</th>
+				<th>Города</th>
+				<th>Лайки</th>
+				<th>Тэги</th>
+			</tr>
+		</thead>
+		<tbody>
+			{% for country in countries %}
+				<tr>
+					<th>
+						<div class="media-left">
+							<a href="/country/{{country.id}}/1">
+								<img class="media-object" src="{% static "images/russia_sm.jpg" %}" id="sm_pic" alt="">
+							</a>
+						</div>
+						<div class="media-body">
+							<h4 class="media-heading" id="country_name"><a href="/country/{{country.id}}/1">{{country.name}}</a></h4>
+						</div>
+					</th>
+					<th>{{country.cnt_cities}}</th>
+					<th>{{country.likes_count}}</th>
+					<th>{{country.tags.count}}</th>
+				</tr>
+			{% endfor %}
+		</tbody>
+	</table>
+
+	<nav class="center">
+	  <ul class="pagination pagination-lg">
+	    <li>
+	      <a href="/countries/1" aria-label="Previous">
+	        <span aria-hidden="true"> << </span>
+	      </a>
+	    </li>
+		{% if page == 1 %}
+			<li class="active"><a href="#">{{page}}</a></li>
+		    <li><a href="/countries/{{page|add:1}}">{{page|add:1}}</a></li>
+		    <li><a href="/countries/{{page|add:2}}">{{page|add:2}}</a></li>
+		    <li><a href="/countries/{{page|add:3}}">{{page|add:3}}</a></li>
+		    <li><a href="/countries/{{page|add:4}}">{{page|add:4}}</a></li>
+		{% elif page == 2 %}
+			<li><a href="/countries/{{page|add:-1}}">{{page|add:-1}}</a></li>
+			<li class="active"><a href="#">{{page}}</a></li>
+			<li><a href="/countries/{{page|add:1}}">{{page|add:1}}</a></li>
+			<li><a href="/countries/{{page|add:2}}">{{page|add:2}}</a></li>
+			<li><a href="/countries/{{page|add:3}}">{{page|add:3}}</a></li>
+		{% elif page == max_page|add:-1 %}
+			<li><a href="/countries/{{page|add:-3}}">{{page|add:-3}}</a></li>
+			<li><a href="/countries/{{page|add:-2}}">{{page|add:-2}}</a></li>
+			<li><a href="/countries/{{page|add:-1}}">{{page|add:-1}}</a></li>
+			<li class="active"><a href="#">{{page}}</a></li>
+			<li><a href="/countries/{{page|add:1}}">{{page|add:1}}</a></li>
+		{% elif page == max_page %}
+			<li><a href="/countries/{{page|add:-4}}">{{page|add:-4}}</a></li>
+			<li><a href="/countries/{{page|add:-3}}">{{page|add:-3}}</a></li>
+			<li><a href="/countries/{{page|add:-2}}">{{page|add:-2}}</a></li>
+			<li><a href="/countries/{{page|add:-1}}">{{page|add:-1}}</a></li>
+			<li class="active"><a href="#">{{page}}</a></li>
+		{% else %}
+			<li><a href="/countries/{{page|add:-2}}">{{page|add:-2}}</a></li>
+			<li><a href="/countries/{{page|add:-1}}">{{page|add:-1}}</a></li>
+			<li class="active"><a href="#">{{page}}</a></li>
+			<li><a href="/countries/{{page|add:1}}">{{page|add:1}}</a></li>
+			<li><a href="/countries/{{page|add:2}}">{{page|add:2}}</a></li>
+		{% endif %}
+		<li>
+	      <a href="/countries/{{max_page}}" aria-label="Next">
+	        <span aria-hidden="true"> >> </span>
+	      </a>
+	    </li>
+	  </ul>
+	</nav>
+
+{% endblock %}

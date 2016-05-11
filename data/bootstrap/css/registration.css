@@ -1,0 +1,17 @@
+/* Registration form */
+.centered-form{
+	margin-top: 60px;
+}
+
+.centered-form .panel{
+	background: rgba(255, 255, 255, 0.8);
+	box-shadow: rgba(0, 0, 0, 0.3) 20px 20px 20px;
+}
+.panel-title {
+    text-align: center;
+    color: #5b9bd1;
+}
+
+.panel-body input.btn.btn-info.btn-block {
+	border-radius: 10px;
+}

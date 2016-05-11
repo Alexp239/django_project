@@ -1,0 +1,85 @@
+html {
+	position: relative;
+  	min-height: 100%;
+}
+
+body {
+	background-color: #FCFCFC;
+	-webkit-font-smoothing: antialiased;
+	font: normal 14px Roboto,arial,sans-serif;
+	margin-bottom: 60px;
+}
+
+.pagination {
+	margin: 0;
+}
+
+#text-main-color {
+	color: #5b9bd1;
+}
+
+
+#header-color {
+	color: #013ADF;
+}
+
+.center {
+	text-align: center;
+}
+
+.buttons {
+	text-align: center;
+	padding-left: 2%;
+	padding-bottom: 5px;
+}
+
+.menu-header {
+	color: #013ADF;
+	font-size: large;
+}
+
+.name-center {
+	text-align: center;
+	color: #5b9bd1;
+}
+
+.btn-glyphicon { padding:8px; background:#ffffff; margin-right:4px; }
+.icon-btn { padding: 1px 15px 3px 2px; border-radius:50px;}
+
+/* Pictures */
+#sm_pic {
+    width: 50px;
+    height: 50px;
+}
+
+#main-pic {
+	max-width: 90%;
+	margin-left: 5%;
+	padding-bottom: 5px;
+	border-radius: 15px;
+}
+
+/* Header */
+#header {
+    margin: 0 auto;
+    margin-bottom: 20px;
+    max-width: 100%;
+	  max-height: 150px;
+    width: 100%;
+}
+
+/* Footer */
+#footer {
+    position: absolute;
+    bottom: 0;
+		height: 60px;
+}
+
+/* Search */
+#search-btn {
+    margin-top: 4px;
+}
+
+.search-query:focus + button {
+    z-index: 3;
+}

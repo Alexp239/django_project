@@ -1,0 +1,87 @@
+{% extends "base.html" %}
+{% load staticfiles %}
+
+{% block title %}Cообщения{% endblock %}
+
+{% block statics %}
+<link href="{% static "css/chat.css" %}" rel="stylesheet">
+{% endblock %}
+
+{% block breadcrumb %}
+<ol class="breadcrumb">
+		<li><a href="/dialogs/">Диалоги</a></li>
+		<li class=active>Сообщения</li>
+</ol>
+{% endblock %}
+
+{% block main_page %}
+<div class="container">
+	<div class="row">
+		<div class="col-md-8 col-md-offset-2">
+			<div class="panel panel-primary">
+				<div class="panel-heading">
+					<span class="glyphicon glyphicon-comment"></span>  {{to_person}}
+				</div>
+				<div class="panel-body">
+					<ul class="chat">
+						{% for message in messages %}
+							{% if message.from_person_id == to_person_id %}
+								<li class="right clearfix">
+									<span class="chat-img pull-right">
+										<a href="/profile/{{to_person_id}}">
+											<img src="{% static "images/no_photo.jpg" %}" alt="User Avatar" class="img-circle" width="50" height="50">
+										</a>
+									</span>
+									<div class="chat-body clearfix">
+										<div class="header">
+											<small class=" text-muted">{{message.time}}</small>
+											<strong class="pull-right primary-font">{{message.from_person}}</strong>
+										</div>
+										<p>
+											{{message.text}}
+										</p>
+									</div>
+								</li>
+							{% else %}
+								{% if message.from_person_id == from_person_id %}
+									<li class="left clearfix">
+										<span class="chat-img pull-left">
+											<img src="{% static "images/no_photo.jpg" %}" alt="User Avatar" class="img-circle" width="50" height="50" >
+										</span>
+										<div class="chat-body clearfix">
+											<div class="header">
+												<small class=" text-muted pull-right">{{message.time}}</small>
+												<strong class="pull-left primary-font">{{message.from_person}}</strong>
+											</div>
+											<p>
+													{{message.text}}
+											</p>
+										</div>
+									</li>
+								{% else %}
+									Error!!!
+								{% endif %}
+							{% endif %}
+						{% empty %}
+							No messages!!!
+						{% endfor %}
+					</ul>
+				</div>
+
+				<form action="/add_message/{{to_person.id}}/" method="post">
+					{% csrf_token %}
+					<div class="panel-footer">
+						<div class="input-group">
+							<input id="input_message" name="input_message" type="text" class="form-control input-sm" placeholder="Type your message here..." />
+							<span class="input-group-btn">
+								<input class="btn btn-warning btn-sm" id="btn-chat" type="submit">
+									Send</input>
+							</span>
+						</div>
+					</div>
+				</form>
+			</div>
+		</div>
+	</div>
+</div>
+{% endblock %}

@@ -1,0 +1,36 @@
+/* Login */
+.etc-login-form {
+  color: #919191;
+}
+.etc-login-form p {
+  margin-bottom: 5px;
+}
+
+.form-login {
+    background-color: #F2F2F2;
+    padding-top: 10px;
+    padding-bottom: 20px;
+    padding-left: 20px;
+    padding-right: 20px;
+    border-radius: 15px;
+    border-color: #d2d2d2;
+    border-width: 5px;
+    box-shadow:0 1px 0 #cfcfcf;
+}
+
+.login-header {
+ border:0 solid #fff;
+ border-bottom-width:1px;
+ padding-bottom:10px;
+ text-align: center;
+ color: #5b9bd1;
+ font-weight: bold;
+}
+
+.form-control {
+    border-radius: 10px;
+}
+
+.wrapper {
+    text-align: center;
+}
