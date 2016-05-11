@@ -127,7 +127,7 @@
 				                            <li>{{trip.name}}</li>
 				                            <li>{{trip.date_start}} - {{trip.date_end}}</li>
 				                            <li>{% for pers in trip.persons.all %}
-													<a href="/profile/{{pers.id}}">{{pers}}</a>;
+													<a href="{% url 'Profile' pers.id %}">{{pers}}</a>;
 												{% endfor %}</li>
 				                            <li>{% for tag in trip.tags.all %}
 												<span id="text-main-color">{{ tag.text }}</span>
@@ -241,9 +241,9 @@
 											<img src="{% static "images/no_photo.jpg" %}" class="avatar" alt="">
 										</div>
 										<div class="post-comments">
-												<p class="meta"> {{comment.time}} <a href="/profile/{{comment.person.id}}">{{comment.person}}</a>
+												<p class="meta"> {{comment.time}} <a href="{% url 'Profile' comment.person.id %}">{{comment.person}}</a>
 												{% if comment.comment_id %}
-													ответил(а) <a href="/profile/{{comment.comment_id.person.id}}">{{comment.comment_id.person}}</a> :
+													ответил(а) <a href="{% url 'Profile' comment.comment_id.person.id %}">{{comment.comment_id.person}}</a> :
 												{% else %}написал(а) :
 												{% endif %}
 												<i class="pull-right"><a data-toggle="modal" data-target="#CommentModalReply_{{comment.id}}"><small>Reply</small></a></i></p>

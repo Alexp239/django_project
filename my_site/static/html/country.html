@@ -3,6 +3,11 @@
 
 {% block title %}{{country.name}}{% endblock %}
 
+{% block statics %}
+	<script src="{% static "js/like.js" %}"></script>
+	<link href="{% static "css/registration.css" %}" rel="stylesheet">
+{% endblock %}
+
 {% block breadcrumb %}
 <ol class="breadcrumb">
 		<li><a href="/countries/1">Страны</a></li>
@@ -23,7 +28,7 @@
 				<img class="media-object" src="{% static "images/spb.jpg" %}" id="main-pic" alt="">
 				<div class="row">
 					<div class = "buttons center">
-						<a class="btn icon-btn btn-primary" href="/update_like_country/{{country.id}}">
+						<a id="like_button" class="btn icon-btn btn-primary" href="/update_like_country/{{country.id}}">
 							{% if is_liked %}
 								<span class="glyphicon btn-glyphicon glyphicon-ok img-circle text-primary"><b>{{country.likes_count}}</b></span>
 							{% else %}
@@ -43,12 +48,15 @@
 										<div class="name-center">
 											 <button class="close" type="button" data-dismiss="modal">x</button>
 											 <h4 class="modal-title" id="myModalLabel">Тег</h4>
+											 {{form.text.help_text}}
 										</div>
 									</div>
 									<form action="/add_tag_country/{{country.id}}/" method="post">
 										{% csrf_token %}
 										<div class="modal-body">
-											<input type="text" name="tag" placeholder="Тег" />
+											<div class="form-group">
+												<input class="form-control input-sm" type="text" name="text" placeholder="{{form.text.label}}" value="{{form.text.value|default_if_none:""}}">
+											</div>
 										</div>
 
 										<div class="modal-footer">

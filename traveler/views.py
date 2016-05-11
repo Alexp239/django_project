@@ -2,11 +2,12 @@ from django.shortcuts import render, redirect
 from django.http import Http404
 from traveler.models import Person, Message, Comment, Country, City, Trip, Tag, Like
 from django.contrib.contenttypes.models import ContentType
+from django.core.urlresolvers import reverse
 from django.db.models import Count, Q, Prefetch, F
 from math import ceil
 from django.contrib.auth import authenticate, login, logout
 from django.utils import timezone
-from .forms import TripForm
+from .forms import TripForm, TagForm
 
 def add_variables(var, request):
     if request.user.is_authenticated():
@@ -28,25 +29,30 @@ def add_trip(request, city_id):
             trip.save()
             trip.persons.add(request.user)
             return redirect('/city/%s/1/1/' % city.id)
-
     else:
         form = TripForm()
-    return render(request, 'add_trip.html', {'form': form, 'city_id': city_id})
+    return render(request, 'add_trip.html', add_variables({'form': form, 'city_id': city_id}, request))
 
 def add_tag_country(request, country_id):
     if request.method == 'POST':
-        country_id = int(country_id)
-        text = request.POST.get('tag', '')
-        text = '#' + text
-        country = Country.objects.get(id=country_id)
-        try:
-            country.tags.get(text=text)
-        except:
-            content_type_id = ContentType.objects.get_for_model(Country)
-            tag = Tag(person=request.user, text=text, content_type=content_type_id, \
-                                    time=timezone.now(), object_id=country_id)
-            tag.save()
-        return redirect('/country/%s/1/' % country_id)
+        form = TagForm(request.POST)
+        print form['text'].help_text
+        if form.is_valid():
+            country_id = int(country_id)
+            text = form.cleaned_data['text']
+            text = '#' + text
+            country = Country.objects.get(id=country_id)
+            try:
+                country.tags.get(text=text)
+            except:
+                content_type_id = ContentType.objects.get_for_model(Country)
+                tag = Tag(person=request.user, text=text, content_type=content_type_id, \
+                                        time=timezone.now(), object_id=country_id)
+                tag.save()
+            return redirect('/country/%s/1/' % country_id)
+    else:
+        form = TagForm()
+    return render(request, 'country.html', add_variables({'form': form, 'country_id': country_id}, request))
 
 def add_tag_city(request, city_id):
     if request.method == 'POST':
@@ -91,7 +97,7 @@ def add_tag_person(request, person_id):
             tag = Tag(person=request.user, text=text, content_type=content_type_id, \
                                     time=timezone.now(), object_id=person_id)
             tag.save()
-        return redirect('/profile/%s/' % person_id)
+        return redirect(reverse('Profile', args=(person_id,)))
 
 def update_add_cities(request, city_id):
     city = City.objects.get(id=city_id)
@@ -142,7 +148,7 @@ def update_like_person(request, object_id):
     except:
         l = Like(person_id=request.user.id, content_type=content_type_id, object_id=object_id, time=timezone.now())
         l.save()
-    return redirect('/profile/%s/' % object_id)
+    return redirect(reverse('Profile', args=(object_id,)))
 
 def user_login(request):
     if request.method == 'POST':
@@ -152,15 +158,15 @@ def user_login(request):
         if user is not None:
             if user.is_active:
                 login(request, user)
-                return redirect('/main/')
+                return redirect(reverse('Main'))
             else:
-                return redirect('/main/')
+                return redirect(reverse('Main'))
         else:
-            return redirect('/main/')
+            return redirect(reverse('Main'))
 
 def user_logout(request):
     logout(request)
-    return redirect('/main/')
+    return redirect(reverse('Main'))
 
 def add_message(request, person_id):
     if request.method == 'POST':
@@ -168,7 +174,7 @@ def add_message(request, person_id):
         to_pers = Person.objects.get(id=person_id)
         mes = Message(from_person=request.user, to_person=to_pers, text=text, time=timezone.now())
         mes.save()
-        return redirect('/messages/%s/' % person_id)
+        return redirect(reverse('Messages', args=(person_id,)))
 
 def add_comment(request, city_id, comment=None):
     if request.method == 'POST':
@@ -205,7 +211,7 @@ def city(request, city_id, trips_page, comments_page):
         city = City.objects.get(id = city_id)
         c_tp = ContentType.objects.get_for_model(City)
         tags = Tag.objects.filter(content_type=c_tp, object_id=city.id).only('text')
-        comments = Comment.objects.filter(city=city.id).select_related('person')[offset_com:offset_com+count_com]
+        comments = Comment.objects.filter(city=city.id).select_related('person', 'comment_id', 'comment_id__person')[offset_com:offset_com+count_com]
 
         trips = Trip.objects.filter(city=city.id)[offset_tr:offset_tr+count_tr]
         trips = trips.prefetch_related(Prefetch('persons', queryset=Person.objects.only('last_name', 'first_name')),\
@@ -298,7 +304,7 @@ def countries(request, page):
     max_page = int(ceil(float(cnt) / count))
     if (cnt == 0) or (offset < cnt):
         countries = Country.objects.all().only('name', 'likes_count')[offset:(offset + count)]
-        countries = countries.prefetch_related(Prefetch('tags', queryset=Tag.objects.only('id'))).annotate(cnt_cities=Count('city'))
+        countries = countries.prefetch_related(Prefetch('tags', queryset=Tag.objects.only('id', 'object_id'))).annotate(cnt_cities=Count('city'))
     else:
         raise Http404
     return render(

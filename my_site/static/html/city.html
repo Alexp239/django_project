@@ -97,6 +97,11 @@
 								</div>
 							</div>
 						</div>
+
+						<a class="btn icon-btn btn-info" href="/add_trip/{{city.id}}/">
+							<span class="glyphicon btn-glyphicon glyphicon-plus img-circle text-info"></span>Add trip
+						</a>
+
 					</div>
 				</div>
 			</div>
@@ -114,56 +119,60 @@
 				<div class="menu-header">Ближайшие поездки</div>
 				<span>
 					{% if trips %}
-						<!-- <table class="table table-bordered">
-							<thead>
-								<tr>
-									<th>Название</th>
-									<th>Дата начала</th>
-									<th>Дата конца</th>
-									<th>Участники</th>
-									<th>Теги</th>
-								</tr>
-							</thead>
-							<tbody>
-								{% for trip in trips %}
-									<tr>
-										<th>{{trip.name}}</th>
-										<th>{{trip.date_start}}</th>
-										<th>{{trip.date_end}}</th>
-										<th>{% for pers in trip.persons.all %}
-												<a href="/profile/{{pers.id}}">{{pers}}</a>;
-											{% endfor %}
-										</th>
-										<th>
-											{% for tag in trip.tags.all %}
-												<span id="text-main-color">{{ tag.text }}</span>
-											{% empty %}
-													<p id="text-main-color">No tags.</p>
-											{% endfor %}
-										</th>
-									</tr>
-								{% endfor %}
-							</tbody>
-						</table> -->
-
 						<div class="row ">
 							{% for trip in trips %}
 					            <div class="col-sm-4">
 									<div class="db-pricing-seven">
-			                        <ul>
-			                            <li>{{trip.name}}</li>
-			                            <li>{{trip.date_start}}</li>
-			                            <li>{{trip.date_end}}</li>
-			                            <li>{% for pers in trip.persons.all %}
-												<a href="/profile/{{pers.id}}">{{pers}}</a>;
+				                        <ul>
+				                            <li>{{trip.name}}</li>
+				                            <li>{{trip.date_start}} - {{trip.date_end}}</li>
+				                            <li>{% for pers in trip.persons.all %}
+													<a href="{% url 'Profile' pers.id %}">{{pers}}</a>;
+												{% endfor %}</li>
+				                            <li>{% for tag in trip.tags.all %}
+												<span id="text-main-color">{{ tag.text }}</span>
+											{% empty %}
+													<p>No tags.</p>
 											{% endfor %}</li>
-			                            <li>{% for tag in trip.tags.all %}
-											<span id="text-main-color">{{ tag.text }}</span>
-										{% empty %}
-												<p>No tags.</p>
-										{% endfor %}</li>
-			                        </ul>
-								</div>
+
+											<a class="btn icon-btn btn-primary" href="/update_trip_persons/{{trip.id}}">
+												{% if user in trip.persons.all %}
+													<span class="glyphicon btn-glyphicon glyphicon-ok img-circle text-primary"></span>
+												{% else %}
+													<span class="glyphicon btn-glyphicon glyphicon-plus img-circle text-primary"></span>
+												{% endif %}
+													Join
+											</a>
+
+											<button type="button" class="btn icon-btn btn-success" data-toggle="modal" data-target="#TagTripModal_{{trip.id}}">
+												<span class="glyphicon btn-glyphicon glyphicon-plus img-circle text-info"></span>
+													Add tag
+											</button>
+
+											<div class="modal fade" id="TagTripModal_{{trip.id}}" tabindex="-1" role="dialog">
+											 	<div class="modal-dialog" role="document">
+													 <div class="modal-content">
+														<div class="modal-header">
+															<div class="name-center">
+																 <button class="close" type="button" data-dismiss="modal">x</button>
+																 <h4 class="modal-title" id="myModalLabel">Тег</h4>
+															</div>
+														</div>
+														<form action="/add_tag_trip/{{trip.id}}/" method="post">
+															{% csrf_token %}
+															<div class="modal-body">
+																<input type="text" name="tag" placeholder="Тег" />
+															</div>
+
+															<div class="modal-footer">
+																<button class="btn btn-primary" type="submit">Добавить</button>
+															</div>
+														</form>
+													</div>
+												</div>
+											</div>
+				                        </ul>
+									</div>
 					            </div>
 							{% endfor %}
 						</div>
@@ -232,9 +241,9 @@
 											<img src="{% static "images/no_photo.jpg" %}" class="avatar" alt="">
 										</div>
 										<div class="post-comments">
-												<p class="meta"> {{comment.time}} <a href="/profile/{{comment.person.id}}">{{comment.person}}</a>
+												<p class="meta"> {{comment.time}} <a href="{% url 'Profile' comment.person.id %}">{{comment.person}}</a>
 												{% if comment.comment_id %}
-													ответил(а) <a href="/profile/{{comment.comment_id.person.id}}">{{comment.comment_id.person}}</a> :
+													ответил(а) <a href="{% url 'Profile' comment.comment_id.person.id %}">{{comment.comment_id.person}}</a> :
 												{% else %}написал(а) :
 												{% endif %}
 												<i class="pull-right"><a data-toggle="modal" data-target="#CommentModalReply_{{comment.id}}"><small>Reply</small></a></i></p>

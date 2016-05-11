@@ -9,7 +9,7 @@
 
 {% block breadcrumb %}
 <ol class="breadcrumb">
-		<li><a href="/dialogs/">Диалоги</a></li>
+		<li><a href="{% url 'Dialogs' %}">Диалоги</a></li>
 		<li class=active>Сообщения</li>
 </ol>
 {% endblock %}
@@ -28,7 +28,7 @@
 							{% if message.from_person_id == to_person_id %}
 								<li class="right clearfix">
 									<span class="chat-img pull-right">
-										<a href="/profile/{{to_person_id}}">
+										<a href="{% url 'Profile' to+person_id %}">
 											<img src="{% static "images/no_photo.jpg" %}" alt="User Avatar" class="img-circle" width="50" height="50">
 										</a>
 									</span>

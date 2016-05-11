@@ -21,7 +21,7 @@
 							{% for pers, mes in persons %}
 								<li class="left clearfix">
 									<span class="chat-img pull-left">
-										<a href="/profile/{{pers.id}}">
+										<a href="{% url 'Profile' pers.id %}">
 											<img src="{% static "images/no_photo.jpg" %}" alt="User Avatar" class="img-circle" width="50" height="50">
 										</a>
 									</span>
@@ -30,7 +30,7 @@
 											<small class=" text-muted pull-right">{{mes.time}}</small>
 											<strong class="pull-left primary-font">{{pers}}</strong>
 										</div>
-										<a href="/messages/{{pers.id}}">
+										<a href= "{% url 'Messages' pers.id %}">
 											{% if mes.from_person_id == user.id or mes.read_flag == True %}
 												<div class="text">
 													<p>

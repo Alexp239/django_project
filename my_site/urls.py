@@ -19,10 +19,10 @@ from traveler import views
 
 urlpatterns = [
     url(r'^admin/', include(admin.site.urls)),
-    url(r'^main/', views.main),
-    url(r'^dialogs/', views.dialogs),
-    url(r'^messages/(?P<to_person_id>\d+)/$', views.messages),
-    url(r'^profile/(?P<person_id>\d+)/$', views.profile),
+    url(r'^main/$', views.main, name="Main"),
+    url(r'^dialogs/$', views.dialogs, name="Dialogs"),
+    url(r'^messages/(?P<to_person_id>\d+)/$', views.messages, name="Messages"),
+    url(r'^profile/(?P<person_id>\d+)/$', views.profile, name="Profile"),
     url(r'^city/(?P<city_id>\d+)/(?P<trips_page>\d+)/(?P<comments_page>\d+)/$', views.city),
     url(r'^countries/(?P<page>\d+)/$', views.countries),
     url(r'^country/(?P<country_id>\d+)/(?P<page>\d+)/$', views.country),
@@ -30,7 +30,7 @@ urlpatterns = [
     url(r'^login/', views.user_login),
     url(r'^logout/', views.user_logout),
     url(r'^update_like_city/(?P<object_id>\d+)/$', views.update_like_city),
-    url(r'^update_like_country/(?P<object_id>\d+)/$', views.update_like_country),
+    url(r'^update_like_country/(?P<object_id>\d+)/$', views.update_like_country, name="UpdateLikeCountry"),
     url(r'^update_add_cities/(?P<city_id>\d+)/$', views.update_add_cities),
     url(r'^update_trip_persons/(?P<trip_id>\d+)/$', views.update_trip_persons),
     url(r'^update_like_person/(?P<object_id>\d+)/$', views.update_like_person),

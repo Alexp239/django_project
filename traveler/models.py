@@ -104,7 +104,7 @@ class City(models.Model):
 class Trip(models.Model):
     name = models.CharField(verbose_name=u'Название', max_length=100)
     persons = models.ManyToManyField(to=Person)
-    date_start = models.DateField(verbose_name=u'Дата начала')
+    date_start = models.DateField(db_index=True, verbose_name=u'Дата начала')
     date_end = models.DateField(verbose_name=u'Дата окончания')
     city = models.ForeignKey(to=City)
     open_flag = models.BooleanField(verbose_name=u'Флаг записи')

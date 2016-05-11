@@ -49,7 +49,7 @@
 									{% endif %}
 									Like
 								</a>
-								<a class="btn icon-btn btn-primary" data-toggle="modal" href="/messages/{{person.id}}/">
+								<a class="btn icon-btn btn-primary" data-toggle="modal" href="{% url 'Messages' person.id %}">
 									<span class="glyphicon btn-glyphicon glyphicon-envelope img-circle text-info"></span>
 									Message
 								</a>
