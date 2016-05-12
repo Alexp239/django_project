@@ -1,0 +1,36 @@
+{% extends "base.html" %}
+{% load staticfiles %}
+
+{% block title %}Добавить тег{% endblock %}
+
+{% block statics %}
+<link href="{% static "css/registration.css" %}" rel="stylesheet">
+{% endblock %}
+
+{% block main_page %}
+    <div class="row centered-form">
+        <div class="col-xs-12 col-sm-8 col-md-4 col-sm-offset-2 col-md-offset-4">
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <h3 class="panel-title">Добавить тег</h3>
+                </div>
+                <div class="panel-body">
+
+                    <form action="{{href}}" method="post">
+                        {% csrf_token %}
+                        <div class="form-group">
+                            {{ form.text.errors }}
+                            {{form.text.help_text}}
+                            <input class="form-control input-sm" type="text" name="text" placeholder="{{form.text.label}}" value="{{form.text.value|default_if_none:"#"}}">
+                        </div>
+
+                        <input type="submit" value="Добавить" class="btn btn-info btn-block">
+
+                    </form>
+
+
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

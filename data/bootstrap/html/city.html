@@ -70,33 +70,10 @@
 								</div>
 							</div>
 						</div>
-						<button type="button" class="btn icon-btn btn-success" data-toggle="modal" data-target="#TagModal">
+						<a type="button" class="btn icon-btn btn-success" href="/add_tag_city/{{city.id}}">
 							<span class="glyphicon btn-glyphicon glyphicon-plus img-circle text-info"></span>
 								Add tag
-						</button>
-
-						<div class="modal fade" id="TagModal" tabindex="-1" role="dialog">
-						 	<div class="modal-dialog" role="document">
-								 <div class="modal-content">
-									<div class="modal-header">
-										<div class="name-center">
-											 <button class="close" type="button" data-dismiss="modal">x</button>
-											 <h4 class="modal-title" id="myModalLabel">Тег</h4>
-										</div>
-									</div>
-									<form action="/add_tag_city/{{city.id}}/" method="post">
-										{% csrf_token %}
-										<div class="modal-body">
-											<input type="text" name="tag" placeholder="Тег" />
-										</div>
-
-										<div class="modal-footer">
-											<button class="btn btn-primary" type="submit">Добавить</button>
-										</div>
-									</form>
-								</div>
-							</div>
-						</div>
+						</a>
 
 						<a class="btn icon-btn btn-info" href="/add_trip/{{city.id}}/">
 							<span class="glyphicon btn-glyphicon glyphicon-plus img-circle text-info"></span>Add trip
@@ -144,33 +121,10 @@
 													Join
 											</a>
 
-											<button type="button" class="btn icon-btn btn-success" data-toggle="modal" data-target="#TagTripModal_{{trip.id}}">
+											<a type="button" class="btn icon-btn btn-success" href="/add_tag_trip/{{trip.id}}">
 												<span class="glyphicon btn-glyphicon glyphicon-plus img-circle text-info"></span>
 													Add tag
-											</button>
-
-											<div class="modal fade" id="TagTripModal_{{trip.id}}" tabindex="-1" role="dialog">
-											 	<div class="modal-dialog" role="document">
-													 <div class="modal-content">
-														<div class="modal-header">
-															<div class="name-center">
-																 <button class="close" type="button" data-dismiss="modal">x</button>
-																 <h4 class="modal-title" id="myModalLabel">Тег</h4>
-															</div>
-														</div>
-														<form action="/add_tag_trip/{{trip.id}}/" method="post">
-															{% csrf_token %}
-															<div class="modal-body">
-																<input type="text" name="tag" placeholder="Тег" />
-															</div>
-
-															<div class="modal-footer">
-																<button class="btn btn-primary" type="submit">Добавить</button>
-															</div>
-														</form>
-													</div>
-												</div>
-											</div>
+											</a>
 				                        </ul>
 									</div>
 					            </div>

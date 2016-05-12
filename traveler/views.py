@@ -36,11 +36,9 @@ def add_trip(request, city_id):
 def add_tag_country(request, country_id):
     if request.method == 'POST':
         form = TagForm(request.POST)
-        print form['text'].help_text
         if form.is_valid():
             country_id = int(country_id)
             text = form.cleaned_data['text']
-            text = '#' + text
             country = Country.objects.get(id=country_id)
             try:
                 country.tags.get(text=text)
@@ -52,37 +50,48 @@ def add_tag_country(request, country_id):
             return redirect('/country/%s/1/' % country_id)
     else:
         form = TagForm()
-    return render(request, 'country.html', add_variables({'form': form, 'country_id': country_id}, request))
+    href = "/add_tag_country/%s/" % country_id
+    return render(request, 'add_tag.html', add_variables({'form': form, 'country_id': country_id, 'href': href}, request))
 
 def add_tag_city(request, city_id):
     if request.method == 'POST':
-        city_id = int(city_id)
-        text = request.POST.get('tag', '')
-        text = '#' + text
-        city = City.objects.get(id=city_id)
-        try:
-            city.tags.get(text=text)
-        except:
-            content_type_id = ContentType.objects.get_for_model(City)
-            tag = Tag(person=request.user, text=text, content_type=content_type_id, \
-                                    time=timezone.now(), object_id=city_id)
-            tag.save()
-        return redirect('/city/%s/1/1/' % city_id)
+        form = TagForm(request.POST)
+        if form.is_valid():
+            city_id = int(city_id)
+            text = form.cleaned_data['text']
+            city = City.objects.get(id=city_id)
+            try:
+                city.tags.get(text=text)
+            except:
+                content_type_id = ContentType.objects.get_for_model(City)
+                tag = Tag(person=request.user, text=text, content_type=content_type_id, \
+                                        time=timezone.now(), object_id=city_id)
+                tag.save()
+            return redirect('/city/%s/1/1/' % city_id)
+    else:
+        form = TagForm()
+    href = "/add_tag_city/%s/" % city_id
+    return render(request, 'add_tag.html', add_variables({'form': form, 'city_id': city_id, 'href': href}, request))
 
 def add_tag_trip(request, trip_id):
     if request.method == 'POST':
-        trip_id = int(trip_id)
-        text = request.POST.get('tag', '')
-        text = '#' + text
-        trip = Trip.objects.get(id=trip_id)
-        try:
-            trip.tags.get(text=text)
-        except:
-            content_type_id = ContentType.objects.get_for_model(Trip)
-            tag = Tag(person=request.user, text=text, content_type=content_type_id, \
-                                    time=timezone.now(), object_id=trip_id)
-            tag.save()
-        return redirect('/city/%s/1/1/' % trip.city.id)
+        form = TagForm(request.POST)
+        if form.is_valid():
+            trip_id = int(trip_id)
+            text = form.cleaned_data['text']
+            trip = Trip.objects.get(id=trip_id)
+            try:
+                trip.tags.get(text=text)
+            except:
+                content_type_id = ContentType.objects.get_for_model(Trip)
+                tag = Tag(person=request.user, text=text, content_type=content_type_id, \
+                                        time=timezone.now(), object_id=trip_id)
+                tag.save()
+            return redirect('/city/%s/1/1/' % trip.city.id)
+    else:
+        form = TagForm()
+    href = "/add_tag_trip/%s/" % trip_id
+    return render(request, 'add_tag.html', add_variables({'form': form, 'trip_id': trip_id, 'href': href}, request))
 
 def add_tag_person(request, person_id):
     if request.method == 'POST':

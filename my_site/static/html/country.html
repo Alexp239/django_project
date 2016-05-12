@@ -28,7 +28,7 @@
 				<img class="media-object" src="{% static "images/spb.jpg" %}" id="main-pic" alt="">
 				<div class="row">
 					<div class = "buttons center">
-						<a id="like_button" class="btn icon-btn btn-primary" href="/update_like_country/{{country.id}}">
+						<a id="like_button" class="btn icon-btn btn-primary" href="/update_like_country/{{country.id}}/">
 							{% if is_liked %}
 								<span class="glyphicon btn-glyphicon glyphicon-ok img-circle text-primary"><b>{{country.likes_count}}</b></span>
 							{% else %}
@@ -36,36 +36,10 @@
 							{% endif %}
 							Like
 						</a>
-						<button type="button" class="btn icon-btn btn-success" data-toggle="modal" data-target="#TagModal">
+						<a type="button" class="btn icon-btn btn-success" href="/add_tag_country/{{country.id}}/">
 							<span class="glyphicon btn-glyphicon glyphicon-plus img-circle text-info"></span>
 								Add tag
-						</button>
-
-						<div class="modal fade" id="TagModal" tabindex="-1" role="dialog">
-						 	<div class="modal-dialog" role="document">
-								 <div class="modal-content">
-									<div class="modal-header">
-										<div class="name-center">
-											 <button class="close" type="button" data-dismiss="modal">x</button>
-											 <h4 class="modal-title" id="myModalLabel">Тег</h4>
-											 {{form.text.help_text}}
-										</div>
-									</div>
-									<form action="/add_tag_country/{{country.id}}/" method="post">
-										{% csrf_token %}
-										<div class="modal-body">
-											<div class="form-group">
-												<input class="form-control input-sm" type="text" name="text" placeholder="{{form.text.label}}" value="{{form.text.value|default_if_none:""}}">
-											</div>
-										</div>
-
-										<div class="modal-footer">
-											<button class="btn btn-primary" type="submit">Добавить</button>
-										</div>
-									</form>
-								</div>
-							</div>
-						</div>
+						</a>
 
 					</div>
 				</div>
