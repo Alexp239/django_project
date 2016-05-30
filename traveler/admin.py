@@ -4,7 +4,7 @@ from traveler.models import Person, Message, Comment, Country, City, Trip, Tag, 
 
 class PersonAdmin(admin.ModelAdmin):
     list_display = ('last_name', 'first_name', 'username', 'date_joined')
-    raw_id_fields = ('country', 'cities_add')
+    raw_id_fields = ('cities_add', )
 
 class CityAdmin(admin.ModelAdmin):
     list_display = ('name', 'country')

@@ -11,7 +11,8 @@ from django.contrib.auth.models import AbstractUser
 class Person(AbstractUser):
     city_from = models.CharField(verbose_name=u'Город', max_length=200,
                                  blank=True, null=True)
-    country = models.ForeignKey(to='Country', blank=True, null=True)
+    country = models.CharField(verbose_name=u'Страна', max_length=100,
+                                 blank=True, null=True)
     phone = models.CharField(verbose_name=u'Телефон', max_length=100,
                              blank=True, null=True)
     text = models.TextField(verbose_name=u'О себе', null=True, blank=True)
@@ -21,6 +22,7 @@ class Person(AbstractUser):
     # persons_add = models.ManyToManyField(to='self', blank=True)
     likes = GenericRelation('Like')
     tags = GenericRelation('Tag')
+    # image = models.ImageField(verbose_name=u'Аватар', blank=True, null=True)
 
     class Meta:
         ordering = ['date_joined']
@@ -73,6 +75,7 @@ class Country(models.Model):
     tags = GenericRelation('Tag')
     likes_count = models.IntegerField(db_index=True, verbose_name=u'Количество лайков',
                                         default=0)
+    views_count = models.IntegerField(verbose_name=u'Количество просмотров', default=0)
 
     class Meta:
         # ordering = ['name']
@@ -91,6 +94,7 @@ class City(models.Model):
     likes_count = models.IntegerField(db_index=True, verbose_name=u'Количество лайков',
                                 default=0)
     tags = GenericRelation('Tag')
+    views_count = models.IntegerField(verbose_name=u'Количество просмотров', default=0)
 
     class Meta:
         ordering = ['name']
@@ -138,7 +142,7 @@ class Like(models.Model):
 
 class Tag(models.Model):
     person = models.ForeignKey(to=Person)
-    text = models.CharField(verbose_name=u'Текст', max_length=100)
+    text = models.CharField(db_index=True, verbose_name=u'Текст', max_length=100)
     object_id = models.IntegerField(verbose_name=u'ID объекта')
     content_type = models.ForeignKey(to=ContentType)
     relation = GenericForeignKey('content_type', 'object_id')
@@ -147,6 +151,7 @@ class Tag(models.Model):
     class Meta:
         verbose_name = u'Тег'
         verbose_name_plural = u'Теги'
+        index_together = ('object_id', 'content_type')
 
     def __unicode__(self):
         return self.text

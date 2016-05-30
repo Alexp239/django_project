@@ -61,6 +61,7 @@
 						<th>Лайки</th>
 						<th>Тэги</th>
 						<th>Поездки</th>
+						<th>Просмотры</th>
 					</tr>
 				</thead>
 				<tbody>
@@ -79,6 +80,7 @@
 							<th>{{city.likes_count}}</th>
 							<th>{{city.tags.count}}</th>
 							<th>{{city.cnt_trips}}</th>
+							<th>{{city.views_count}}</th>
 						</tr>
 					{% endfor %}
 				</tbody>
@@ -142,6 +144,13 @@
 					{% empty %}
 						<p id="text-main-color">No tags.</p>
 					{% endfor %}
+			</div>
+		</div>
+
+		<div class="row">
+			<div class="bs-callout bs-callout-danger">
+				<div class="menu-header">Просмотры</div>
+					{{country.views_count}}
 			</div>
 		</div>
 	</div>

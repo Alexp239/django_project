@@ -20,6 +20,7 @@ from traveler import views
 urlpatterns = [
     url(r'^admin/', include(admin.site.urls)),
     url(r'^main/$', views.main, name="Main"),
+    url(r'^settings/$', views.settings, name="Settings"),
     url(r'^dialogs/$', views.dialogs, name="Dialogs"),
     url(r'^messages/(?P<to_person_id>\d+)/$', views.messages, name="Messages"),
     url(r'^profile/(?P<person_id>\d+)/$', views.profile, name="Profile"),
@@ -27,7 +28,7 @@ urlpatterns = [
     url(r'^countries/(?P<page>\d+)/$', views.countries),
     url(r'^country/(?P<country_id>\d+)/(?P<page>\d+)/$', views.country),
     url(r'^registration/', views.registration),
-    url(r'^login/', views.user_login),
+    url(r'^login/', views.user_login, name="Login"),
     url(r'^logout/', views.user_logout),
     url(r'^update_like_city/(?P<object_id>\d+)/$', views.update_like_city),
     url(r'^update_like_country/(?P<object_id>\d+)/$', views.update_like_country, name="UpdateLikeCountry"),

@@ -119,10 +119,23 @@ USE_L10N = True
 
 USE_TZ = True
 
+# Email
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_USE_TLS = True
+EMAIL_HOST = 'smtp.yandex.ru'
+EMAIL_PORT = 587
+EMAIL_HOST_USER = 'alexp470@yandex.ru'
+EMAIL_HOST_PASSWORD = 'abprekmnehf1996'
+DEFAULT_FROM_EMAIL = EMAIL_HOST_USER
+
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/1.9/howto/static-files/
 
+LOGIN_URL = '/login/'
 STATIC_URL = '/static/'
 STATIC_ROOT = '/home/alex/django_project/my_site/my_site/static'
 STATICFILES_DIRS = ['/home/alex/django_project/my_site/data/bootstrap']
+
+MEDIA_ROOT = '/home/alex/django_project/my_site/my_site/media/'
+MEDIA_URL = '/media/'

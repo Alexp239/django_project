@@ -5,9 +5,11 @@ from django.contrib.contenttypes.models import ContentType
 from django.core.urlresolvers import reverse
 from django.db.models import Count, Q, Prefetch, F
 from math import ceil
+from django.contrib.auth.decorators import login_required
 from django.contrib.auth import authenticate, login, logout
 from django.utils import timezone
-from .forms import TripForm, TagForm
+from .forms import TripForm, TagForm, LoginForm, RegistrationForm, SettingForm
+from django.core.mail import EmailMessage
 
 def add_variables(var, request):
     if request.user.is_authenticated():
@@ -17,6 +19,7 @@ def add_variables(var, request):
     var.update([('user', request.user), ('count_mes', not_read_mes)])
     return var
 
+@login_required
 def add_trip(request, city_id):
     if request.method == 'POST':
         form = TripForm(request.POST)
@@ -33,6 +36,7 @@ def add_trip(request, city_id):
         form = TripForm()
     return render(request, 'add_trip.html', add_variables({'form': form, 'city_id': city_id}, request))
 
+@login_required
 def add_tag_country(request, country_id):
     if request.method == 'POST':
         form = TagForm(request.POST)
@@ -53,6 +57,7 @@ def add_tag_country(request, country_id):
     href = "/add_tag_country/%s/" % country_id
     return render(request, 'add_tag.html', add_variables({'form': form, 'country_id': country_id, 'href': href}, request))
 
+@login_required
 def add_tag_city(request, city_id):
     if request.method == 'POST':
         form = TagForm(request.POST)
@@ -73,6 +78,7 @@ def add_tag_city(request, city_id):
     href = "/add_tag_city/%s/" % city_id
     return render(request, 'add_tag.html', add_variables({'form': form, 'city_id': city_id, 'href': href}, request))
 
+@login_required
 def add_tag_trip(request, trip_id):
     if request.method == 'POST':
         form = TagForm(request.POST)
@@ -93,6 +99,7 @@ def add_tag_trip(request, trip_id):
     href = "/add_tag_trip/%s/" % trip_id
     return render(request, 'add_tag.html', add_variables({'form': form, 'trip_id': trip_id, 'href': href}, request))
 
+@login_required
 def add_tag_person(request, person_id):
     if request.method == 'POST':
         person_id = int(person_id)
@@ -108,6 +115,7 @@ def add_tag_person(request, person_id):
             tag.save()
         return redirect(reverse('Profile', args=(person_id,)))
 
+@login_required
 def update_add_cities(request, city_id):
     city = City.objects.get(id=city_id)
     if city in request.user.cities_add.all():
@@ -116,6 +124,7 @@ def update_add_cities(request, city_id):
         request.user.cities_add.add(city)
     return redirect('/city/%s/1/1/' % city_id)
 
+@login_required
 def update_trip_persons(request, trip_id):
     trip = Trip.objects.get(id=trip_id)
     if request.user in trip.persons.all():
@@ -124,6 +133,7 @@ def update_trip_persons(request, trip_id):
         trip.persons.add(request.user)
     return redirect('/city/%s/1/1/' % trip.city.id)
 
+@login_required
 def update_like_country(request, object_id):
     object_id = int(object_id)
     try:
@@ -136,7 +146,7 @@ def update_like_country(request, object_id):
         l.save()
     return redirect('/country/%s/1/' % object_id)
 
-
+@login_required
 def update_like_city(request, object_id):
     object_id = int(object_id)
     try:
@@ -149,6 +159,7 @@ def update_like_city(request, object_id):
         l.save()
     return redirect('/city/%s/1/1/' % object_id)
 
+@login_required
 def update_like_person(request, object_id):
     object_id = int(object_id)
     try:
@@ -161,30 +172,43 @@ def update_like_person(request, object_id):
 
 def user_login(request):
     if request.method == 'POST':
-        username = request.POST.get('username', '')
-        password = request.POST.get('password', '')
-        user = authenticate(username=username, password=password)
-        if user is not None:
-            if user.is_active:
-                login(request, user)
-                return redirect(reverse('Main'))
+        form = LoginForm(request.POST)
+        if form.is_valid():
+            username = form.cleaned_data['username']
+            password = form.cleaned_data['password']
+            user = authenticate(username=username, password=password)
+            if user is not None:
+                if user.is_active:
+                    login(request, user)
+                    return redirect(reverse('Main'))
+                else:
+                    form.add_error(None, "User was diacitaved")
             else:
-                return redirect(reverse('Main'))
-        else:
-            return redirect(reverse('Main'))
+                form.add_error(None, "Wrong username or password")
+    else:
+        form = LoginForm()
+    return render(request, 'login.html', add_variables({'form': form, }, request))
 
+@login_required
 def user_logout(request):
     logout(request)
     return redirect(reverse('Main'))
 
+@login_required
 def add_message(request, person_id):
     if request.method == 'POST':
         text = request.POST.get('input_message', '')
         to_pers = Person.objects.get(id=person_id)
         mes = Message(from_person=request.user, to_person=to_pers, text=text, time=timezone.now())
         mes.save()
+        dialog_link = 'http://127.0.0.1:8000/messages/' + str(mes.from_person.id)
+        print dialog_link
+        text_mes = str(mes.from_person.username) + ' send messge to you with text:\n\n' + mes.text + '\n\nYou can answer here:\n' + dialog_link
+        email = EmailMessage('New message', text_mes, to=[mes.to_person.email])
+        email.send(fail_silently=False)
         return redirect(reverse('Messages', args=(person_id,)))
 
+@login_required
 def add_comment(request, city_id, comment=None):
     if request.method == 'POST':
         text = request.POST.get('text_comment', '')
@@ -195,9 +219,10 @@ def add_comment(request, city_id, comment=None):
         com.save()
         return redirect('/city/%s/1/1/' % city_id)
 
+@login_required
 def profile(request, person_id):
     try:
-        person = Person.objects.select_related('country').prefetch_related(Prefetch('cities_add', queryset=City.objects.only('name'))).get(id=person_id)
+        person = Person.objects.prefetch_related(Prefetch('cities_add', queryset=City.objects.only('name'))).get(id=person_id)
         try:
             content_type_id = ContentType.objects.get_for_model(Person)
             Like.objects.get(person_id=request.user.id, content_type=content_type_id, object_id=person_id)
@@ -210,6 +235,21 @@ def profile(request, person_id):
         request, 'profile.html', add_variables({'person': person, 'is_liked': is_liked}, request)
     )
 
+@login_required
+def settings(request):
+    person = request.user
+    if request.method == 'POST':
+        form = SettingForm(request.POST, instance=person)
+        if form.is_valid():
+            form.save()
+            return redirect('/profile/%s/' % person.id)
+    else:
+        form = SettingForm(instance=person)
+    return render(
+        request, 'settings.html', add_variables({'form': form, 'person': person}, request)
+    )
+
+@login_required
 def city(request, city_id, trips_page, comments_page):
     try:
         count_tr = 3
@@ -242,6 +282,8 @@ def city(request, city_id, trips_page, comments_page):
         if city in request.user.cities_add.all():
             is_city_add = 1
 
+        city.views_count += 1
+        city.save()
     except:
         raise Http404
     return render(
@@ -262,9 +304,26 @@ def main(request):
 
 
 def registration(request):
-    return render(request, 'registration.html', {})
+    if request.method == 'POST':
+        form = RegistrationForm(request.POST)
+        if form.is_valid():
+            password = form.cleaned_data['password']
+            user = form.save()
+            user.set_password(password)
+            city = form.cleaned_data["city_from"]
+            country = form.cleaned_data["country"]
+            user.city_from = city
+            user.country = country
+            user.save()
+            user = authenticate(username=request.POST.get("username"), password=password)
+            login(request, user)
+            return redirect(reverse('Main'))
+    else:
+        form = RegistrationForm()
+    return render(request, 'registration.html', add_variables({'form': form}, request))
 
 
+@login_required
 def messages(request, to_person_id):
     try:
         from_person_id = request.user.id
@@ -273,7 +332,7 @@ def messages(request, to_person_id):
                                             to_person_id = to_person_id) |
                                           Q(from_person_id = to_person_id,
                                             to_person_id = from_person_id))
-        Message.objects.filter(from_person_id=to_person_id, to_person_id=from_person_id, read_flag = False).update(read_flag=True)
+        Message.objects.filter(from_person_id=to_person_id, to_person_id=from_person_id).update(read_flag=True)
     except:
         raise Http404
     return render(
@@ -282,11 +341,12 @@ def messages(request, to_person_id):
                                    'to_person_id' : int(to_person_id),
                                    'to_person': to_person}, request))
 
+@login_required
 def dialogs(request):
     try:
         current_person_id = request.user.id
         messages = Message.objects.filter(Q(from_person_id = current_person_id) |
-                    Q(to_person_id = current_person_id)).select_related('to_person', 'from_person')
+                    Q(to_person_id = current_person_id)).select_related('to_person', 'from_person').order_by('-time')
         persons = []
         persons_id = []
         current_person_id = int(current_person_id)
@@ -305,7 +365,7 @@ def dialogs(request):
     return render(request, 'dialogs.html', add_variables({'persons': persons,
                         'current_person_id': current_person_id}, request))
 
-
+@login_required
 def countries(request, page):
     count = 10
     offset = (int(page) - 1) * count
@@ -321,6 +381,7 @@ def countries(request, page):
                     'max_page': max_page}, request)
     )
 
+@login_required
 def country(request, country_id, page):
     count = 10
     country = Country.objects.get(id = country_id)
@@ -336,6 +397,8 @@ def country(request, country_id, page):
     if (cnt == 0) or (offset < cnt):
         cities = City.objects.filter(country = country_id).only('name', 'likes_count')[offset:(offset + count)]
         cities = cities.prefetch_related(Prefetch('tags', queryset=Tag.objects.only('id'))).annotate(cnt_trips = Count('trip'))
+        country.views_count += 1
+        country.save()
     else:
         raise Http404
     return render(

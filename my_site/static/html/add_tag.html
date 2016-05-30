@@ -18,6 +18,7 @@
 
                     <form action="{{href}}" method="post">
                         {% csrf_token %}
+                        {{ form.non_field_errors }}
                         <div class="form-group">
                             {{ form.text.errors }}
                             {{form.text.help_text}}

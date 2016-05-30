@@ -18,6 +18,7 @@
 
                     <form action="/add_trip/{{city_id}}/" method="post">
                         {% csrf_token %}
+                        {{ form.non_field_errors }}
                         <div class="form-group">
                             {{ form.name.errors }}
                             <input type="text" name="name" class="form-control input-sm" value="{{form.name.value|default_if_none:""}}" placeholder="{{form.name.label}}">

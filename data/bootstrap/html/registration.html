@@ -18,64 +18,60 @@
             </div>
             <div class="panel-body">
 
-                <form role="form">
+                <form action="/registration/" method="post">
+                    {% csrf_token %}
+                    {{ form.non_field_errors }}
                     <div class="form-group">
-                        <input type="text" name="nickname" id="nickname" class="form-control input-sm" placeholder="Ник">
-                    </div>
-
-
-                    <div class="row">
-                        <div class="col-xs-6 col-sm-6 col-md-6">
-                            <div class="form-group">
-                                <input type="text" name="first_name" id="first_name" class="form-control input-sm" placeholder="Имя">
-                            </div>
-                        </div>
-                        <div class="col-xs-6 col-sm-6 col-md-6">
-                            <div class="form-group">
-                                <input type="text" name="last_name" id="last_name" class="form-control input-sm" placeholder="Фамилия">
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="form-group">
-                        <input type="email" name="email" id="email" class="form-control input-sm" placeholder="Почта">
+                        {{ form.username.errors }}
+                        <input type="text" name="username" id="username" class="form-control input-sm" placeholder="{{form.username.label}}" value="{{form.username.value|default_if_none:""}}">
                     </div>
 
                     <div class="row">
                         <div class="col-xs-6 col-sm-6 col-md-6">
                             <div class="form-group">
-                                <input type="text" name="city" id="city" class="form-control input-sm" placeholder="Город">
+                                {{ form.first_name.errors }}
+                                <input type="text" name="first_name" id="first_name" class="form-control input-sm" placeholder="{{form.first_name.label}}" value="{{form.first_name.value|default_if_none:""}}">
                             </div>
                         </div>
                         <div class="col-xs-6 col-sm-6 col-md-6">
                             <div class="form-group">
-                                <input type="text" name="country" id="country" class="form-control input-sm" placeholder="Страна">
+                                {{ form.last_name.errors }}
+                                <input type="text" name="last_name" id="last_name" class="form-control input-sm" placeholder="{{form.last_name.label}}" value="{{form.last_name.value|default_if_none:""}}">
                             </div>
                         </div>
                     </div>
 
-                    <!--
-
                     <div class="form-group">
-                        <input type="tel" name="telephone" id="telephone" class="form-control input-sm" placeholder="Телефон">
+                        {{ form.email.errors }}
+                        <input type="email" name="email" id="email" class="form-control input-sm" placeholder="{{form.email.label}}" value="{{form.email.value|default_if_none:""}}">
                     </div>
 
-                    <div class="form-group">
-                        <input type="url" name="vk" id="vk" class="form-control input-sm" placeholder=" ВК">
-                    </div>
-                    <div class="form-group">
-                        <input type="text" name="describ" id="vk" class="form-control input-lg" placeholder="О себе">
-                    </div>
--->
                     <div class="row">
                         <div class="col-xs-6 col-sm-6 col-md-6">
                             <div class="form-group">
-                                <input type="password" name="password" id="password" class="form-control input-sm" placeholder="Пароль">
+                                {{ form.city_from.errors }}
+                                <input type="text" name="city_from" id="city" class="form-control input-sm" placeholder="{{form.city_from.label}}" value="{{form.city_from.value|default_if_none:""}}">
                             </div>
                         </div>
                         <div class="col-xs-6 col-sm-6 col-md-6">
                             <div class="form-group">
-                                <input type="password" name="password_confirmation" id="password_confirmation" class="form-control input-sm" placeholder="Подтверждение">
+                                {{ form.country.errors }}
+                                <input type="text" name="country" id="country" class="form-control input-sm" placeholder="{{form.country.label}}" value="{{form.country.value|default_if_none:""}}">
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-xs-6 col-sm-6 col-md-6">
+                            <div class="form-group">
+                                {{ form.password.errors }}
+                                <input type="password" name="password" id="password" class="form-control input-sm" placeholder="{{form.password.label}}">
+                            </div>
+                        </div>
+                        <div class="col-xs-6 col-sm-6 col-md-6">
+                            <div class="form-group">
+                                {{ form.confirm_password.errors }}
+                                <input type="password" name="confirm_password" id="confirm_password" class="form-control input-sm" placeholder="{{form.confirm_password.label}}">
                             </div>
                         </div>
                     </div>

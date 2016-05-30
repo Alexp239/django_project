@@ -3,19 +3,43 @@
 
 {% block title %}Главная{% endblock %}
 
+{% block statics %}
+	<link href="{% static "css/main.css" %}" rel="stylesheet">
+{% endblock %}
+
 {% block main_page %}
 
-	{% for country in countries %}
-		{{country.id}} {{country.name}} {{country.likes_count}} </br>
-	{% endfor %}
-	</br></br>
-	{% for city in cities %}
-		{{city.id}} {{city.name}} {{city.likes_count}} </br>
-	{% endfor %}
-	</br></br>
-	{% for tag in tags %}
-		{{tag.text}} {{tag.count_tags}} </br>
-	{% endfor %}
-	<script src="{% static "js/like.js" %}"></script>
+<div class="container">
+	<div class="jumbotron">
+		<h1 id="text-main-color">Travel Guide</h1>
+		<p>Исследуй города, находи попутчиков, делись эмоциями в коментариях и сообщениях, ставь лайки</p>
+	</div>
+	<div class="row">
+		<div class="col-sm-4">
+			<h3 id="text-main-color">Популярные страны</h3>
+			<div id="text-main-color">
+				{% for country in countries %}
+					<li><a href="/country/{{country.id}}/1/">{{country.name}}</a></li>
+				{% endfor %}
+			</div>
+		</div>
+		<div class="col-sm-4">
+			<h3 id="text-main-color">Популярные города</h3>
+			<div id="text-main-color">
+				{% for city in cities %}
+					<li><a href="/city/{{city.id}}/1/1">{{city.name}}</a></li>
+				{% endfor %}
+			</div>
+		</div>
+		<div class="col-sm-4">
+			<h3 id="text-main-color">Популярные теги</h3>
+			<div id="text-main-color">
+				{% for tag in tags %}
+					<li>{{tag.text}}</li>
+				{% endfor %}
+			</div>
+		</div>
+	</div>
+</div>
 
 {% endblock %}

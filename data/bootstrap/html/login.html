@@ -1,0 +1,36 @@
+{% extends "base.html" %}
+{% load staticfiles %}
+
+{% block title %}Войти{% endblock %}
+
+{% block statics %}
+    <link href="{% static "css/login.css" %}" rel="stylesheet">
+{% endblock %}
+
+{% block sidebar %} {% endblock %}
+
+{% block full_page %}
+<div class="col-xs-12 col-sm-8 col-md-4 col-sm-offset-2 col-md-offset-4">
+    <form action="/login/" method="post">
+        {% csrf_token %}
+        <div class="form-login">
+            <h4 class="login-header">Войти</h4>
+            {{ form.non_field_errors }}
+            {{ form.username.errors }}
+            <input type="text" name="username" class="form-control input-sm chat-input" placeholder="{{form.username.label}}" value="{{form.username.value|default_if_none:""}}">
+            </br>
+            {{ form.password.errors }}
+            <input type="password" name="password" class="form-control input-sm chat-input" placeholder="{{form.password.label}}">
+            </br>
+            <div class="etc-login-form">
+                    <p><a href="/registration/">Регистрация</a></p>
+            </div>
+                <div class="wrapper">
+                    <span class="group-btn">
+                        <input class="btn btn-primary btn-md" type="submit" value="Login"><i class="fa fa-sign-in"></i></input>
+                    </span>
+                </div>
+        </div>
+    </form>
+</div>
+{% endblock %}
