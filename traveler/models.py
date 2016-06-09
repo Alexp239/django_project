@@ -22,7 +22,7 @@ class Person(AbstractUser):
     # persons_add = models.ManyToManyField(to='self', blank=True)
     likes = GenericRelation('Like')
     tags = GenericRelation('Tag')
-    # image = models.ImageField(verbose_name=u'Аватар', blank=True, null=True)
+    image = models.ImageField(verbose_name=u'Аватар', blank=True, null=True, upload_to='profile_images/')
 
     class Meta:
         ordering = ['date_joined']

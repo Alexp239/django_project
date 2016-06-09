@@ -16,6 +16,9 @@ Including another URLconf
 from django.conf.urls import include, url
 from django.contrib import admin
 from traveler import views
+from django.conf import settings
+from django.conf.urls.static import static
+from django.contrib.staticfiles.urls import staticfiles_urlpatterns
 
 urlpatterns = [
     url(r'^admin/', include(admin.site.urls)),
@@ -30,11 +33,14 @@ urlpatterns = [
     url(r'^registration/', views.registration),
     url(r'^login/', views.user_login, name="Login"),
     url(r'^logout/', views.user_logout),
-    url(r'^update_like_city/(?P<object_id>\d+)/$', views.update_like_city),
-    url(r'^update_like_country/(?P<object_id>\d+)/$', views.update_like_country, name="UpdateLikeCountry"),
+    # url(r'^update_like_city/(?P<object_id>\d+)/$', views.update_like_city),
+    url(r'^update_like_city2/$', views.update_like_city2),
+    # url(r'^update_like_country/(?P<object_id>\d+)/$', views.update_like_country, name="UpdateLikeCountry"),
+    url(r'^update_like_country2/$', views.update_like_country2, name="UpdateLikeCountry2"),
     url(r'^update_add_cities/(?P<city_id>\d+)/$', views.update_add_cities),
     url(r'^update_trip_persons/(?P<trip_id>\d+)/$', views.update_trip_persons),
-    url(r'^update_like_person/(?P<object_id>\d+)/$', views.update_like_person),
+    # url(r'^update_like_person/(?P<object_id>\d+)/$', views.update_like_person),
+    url(r'^update_like_person2/$', views.update_like_person2),
     url(r'^add_message/(?P<person_id>\d+)/$', views.add_message),
     url(r'^add_comment/(?P<city_id>\d+)/(?P<comment>\d+)/$', views.add_comment),
     url(r'^add_comment/(?P<city_id>\d+)/$', views.add_comment),
@@ -42,5 +48,8 @@ urlpatterns = [
     url(r'^add_tag_city/(?P<city_id>\d+)/$', views.add_tag_city),
     url(r'^add_tag_person/(?P<person_id>\d+)/$', views.add_tag_person),
     url(r'^add_tag_trip/(?P<trip_id>\d+)/$', views.add_tag_trip),
-    url(r'^add_trip/(?P<city_id>\d+)/$', views.add_trip)
+    url(r'^add_trip/(?P<city_id>\d+)/$', views.add_trip),
+    url(r'^autocomplete_tags/', views.autocomplete_tags),
     ]
+urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+urlpatterns += staticfiles_urlpatterns()

@@ -66,4 +66,4 @@ class SettingForm(forms.ModelForm):
 
     class Meta:
         model = Person
-        fields = ('first_name', 'last_name', 'email', 'city_from', 'country', 'phone', 'vk_id', 'text')
+        fields = ('first_name', 'last_name', 'email', 'city_from', 'country', 'phone', 'vk_id', 'text', 'image')

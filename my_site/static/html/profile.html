@@ -5,6 +5,7 @@
 
 {% block statics %}
 <link href="{% static "css/profile.css" %}" rel="stylesheet">
+<script src="{% static "js/like.js" %}"></script>
 {% endblock %}
 
 {% block main_page %}
@@ -41,12 +42,15 @@
 					 <div class="row">
 						<div class="col-xs-12 social-btns">
 							<div class="buttons">
-								<a class="btn icon-btn btn-primary" href="/update_like_person/{{person.id}}/">
-									{% if is_liked %}
-										<span class="glyphicon btn-glyphicon glyphicon-ok img-circle text-primary"><b>{{person.likes.all.count}}</b></span>
-									{% else %}
-										<span class="glyphicon btn-glyphicon glyphicon-thumbs-up img-circle text-primary"><b>{{person.likes.all.count}}</b></span>
-									{% endif %}
+								<a id="like_button_person" class="btn icon-btn btn-primary" data="{{person.id}}">
+									<span class="glyphicon btn-glyphicon img-circle text-primary">
+
+										<span class="glyphicon glyphicon-ok" id="liked_img"
+										{% if not is_liked %}style="display: none" {% endif %}></span>
+										<span class="glyphicon glyphicon-thumbs-up" id="not_liked_img"
+										{% if is_liked %}style="display: none" {% endif %}></span>
+										<b><span id="likes_count_text">{{person.likes.all.count}}</span></b>
+									</span>
 									Like
 								</a>
 								<a class="btn icon-btn btn-primary" data-toggle="modal" href="{% url 'Messages' person.id %}">

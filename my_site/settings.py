@@ -137,5 +137,5 @@ STATIC_URL = '/static/'
 STATIC_ROOT = '/home/alex/django_project/my_site/my_site/static'
 STATICFILES_DIRS = ['/home/alex/django_project/my_site/data/bootstrap']
 
-MEDIA_ROOT = '/home/alex/django_project/my_site/my_site/media/'
+MEDIA_ROOT = '/home/alex/django_project/my_site/my_site/media'
 MEDIA_URL = '/media/'

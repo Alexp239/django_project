@@ -33,7 +33,7 @@ def gentags_cities(n):
     count = 0
     for i in range(n):
         count += 1
-        tags.append(Tag(person=random.choice(persons), text='#'+random.choice(words),
+        tags.append(Tag(person=random.choice(persons), text='#'+random.choice(words)[:-1],
                            content_type=c_tp, time=tm, object_id=random.choice(cities).id))
         if (count == mx):
             Tag.objects.bulk_create(tags)
@@ -53,7 +53,7 @@ def gentags_countries(n):
     count = 0
     for i in range(n):
         count += 1
-        tags.append(Tag(person=random.choice(persons), text='#'+random.choice(words),
+        tags.append(Tag(person=random.choice(persons), text='#'+random.choice(words)[:-1],
                            content_type=c_tp, time=tm, object_id=random.choice(countries).id))
         if (count == mx):
             Tag.objects.bulk_create(tags)
@@ -73,7 +73,7 @@ def gentags_trips(n):
     count = 0
     for i in range(n):
         count += 1
-        tags.append(Tag(person=random.choice(persons), text='#'+random.choice(words),
+        tags.append(Tag(person=random.choice(persons), text='#'+random.choice(words)[:-1],
                            content_type=c_tp, time=tm, object_id=random.choice(trips).id))
         if (count == mx):
             Tag.objects.bulk_create(tags)
@@ -92,7 +92,7 @@ def gentags_persons(n):
     count = 0
     for i in range(n):
         count += 1
-        tags.append(Tag(person=random.choice(persons), text='#'+random.choice(words),
+        tags.append(Tag(person=random.choice(persons), text='#'+random.choice(words)[:-1],
                            content_type=c_tp, time=tm, object_id=random.choice(persons).id))
         if (count == mx):
             Tag.objects.bulk_create(tags)
@@ -171,40 +171,40 @@ def genlikes_countries(n):
     Like.objects.bulk_create(likes)
 
 
-def genlikes_comments(n):
-    persons = Person.objects.all()
-    comments = Comment.objects.all()
-    c_tp = ContentType.objects.get_for_model(Comment)
-    tm = timezone.make_aware(datetime.datetime.now(), timezone.get_current_timezone())
-    likes = []
-    count = 0
-    for i in range(n):
-        count += 1
-        likes.append(Like(person=random.choice(persons), content_type=c_tp,
-                           time=tm, object_id=random.choice(comments).id))
-        if count == mx:
-            Like.objects.bulk_create(likes)
-            likes = []
-            count = 0
-    Like.objects.bulk_create(likes)
-
-
-def genlikes_messages(n):
-    persons = Person.objects.all()
-    messages = Message.objects.all()
-    c_tp = ContentType.objects.get_for_model(Message)
-    tm = timezone.make_aware(datetime.datetime.now(), timezone.get_current_timezone())
-    likes = []
-    count = 0
-    for i in range(n):
-        count += 1
-        likes.append(Like(person=random.choice(persons), content_type=c_tp,
-                           time=tm, object_id=random.choice(messages).id))
-        if count == mx:
-            Like.objects.bulk_create(likes)
-            likes = []
-            count = 0
-    Like.objects.bulk_create(likes)
+# def genlikes_comments(n):
+#     persons = Person.objects.all()
+#     comments = Comment.objects.all()
+#     c_tp = ContentType.objects.get_for_model(Comment)
+#     tm = timezone.make_aware(datetime.datetime.now(), timezone.get_current_timezone())
+#     likes = []
+#     count = 0
+#     for i in range(n):
+#         count += 1
+#         likes.append(Like(person=random.choice(persons), content_type=c_tp,
+#                            time=tm, object_id=random.choice(comments).id))
+#         if count == mx:
+#             Like.objects.bulk_create(likes)
+#             likes = []
+#             count = 0
+#     Like.objects.bulk_create(likes)
+#
+#
+# def genlikes_messages(n):
+#     persons = Person.objects.all()
+#     messages = Message.objects.all()
+#     c_tp = ContentType.objects.get_for_model(Message)
+#     tm = timezone.make_aware(datetime.datetime.now(), timezone.get_current_timezone())
+#     likes = []
+#     count = 0
+#     for i in range(n):
+#         count += 1
+#         likes.append(Like(person=random.choice(persons), content_type=c_tp,
+#                            time=tm, object_id=random.choice(messages).id))
+#         if count == mx:
+#             Like.objects.bulk_create(likes)
+#             likes = []
+#             count = 0
+#     Like.objects.bulk_create(likes)
 
 
 def gencomments(n, persons, cities):

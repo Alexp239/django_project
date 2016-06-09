@@ -9,13 +9,13 @@
 
 {% block main_page %}
 
-<div class="container">
+<div class="container-fluid">
 	<div class="jumbotron">
 		<h1 id="text-main-color">Travel Guide</h1>
 		<p>Исследуй города, находи попутчиков, делись эмоциями в коментариях и сообщениях, ставь лайки</p>
 	</div>
 	<div class="row">
-		<div class="col-sm-4">
+		<div class="col-sm-6">
 			<h3 id="text-main-color">Популярные страны</h3>
 			<div id="text-main-color">
 				{% for country in countries %}
@@ -23,7 +23,7 @@
 				{% endfor %}
 			</div>
 		</div>
-		<div class="col-sm-4">
+		<div class="col-sm-6">
 			<h3 id="text-main-color">Популярные города</h3>
 			<div id="text-main-color">
 				{% for city in cities %}
@@ -31,14 +31,14 @@
 				{% endfor %}
 			</div>
 		</div>
-		<div class="col-sm-4">
+		<!-- <div class="col-sm-4">
 			<h3 id="text-main-color">Популярные теги</h3>
 			<div id="text-main-color">
 				{% for tag in tags %}
 					<li>{{tag.text}}</li>
 				{% endfor %}
 			</div>
-		</div>
+		</div> -->
 	</div>
 </div>
 

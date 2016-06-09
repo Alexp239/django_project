@@ -1,22 +1,25 @@
-from django.shortcuts import render, redirect
-from django.http import Http404
+from django.shortcuts import render, redirect, HttpResponse
+from django.http import Http404, HttpResponseBadRequest
 from traveler.models import Person, Message, Comment, Country, City, Trip, Tag, Like
 from django.contrib.contenttypes.models import ContentType
 from django.core.urlresolvers import reverse
 from django.db.models import Count, Q, Prefetch, F
 from math import ceil
 from django.contrib.auth.decorators import login_required
+from django.views.decorators.csrf import csrf_exempt
 from django.contrib.auth import authenticate, login, logout
 from django.utils import timezone
 from .forms import TripForm, TagForm, LoginForm, RegistrationForm, SettingForm
 from django.core.mail import EmailMessage
+import json
 
 def add_variables(var, request):
     if request.user.is_authenticated():
         not_read_mes = Message.objects.filter(to_person=request.user, read_flag=False).count()
     else:
         not_read_mes = 0
-    var.update([('user', request.user), ('count_mes', not_read_mes)])
+    best_tags = Tag.objects.all().values('text').annotate(count_tags=Count('text')).order_by('-count_tags')[:10]
+    var.update([('user', request.user), ('count_mes', not_read_mes), ('best_tags', best_tags)])
     return var
 
 @login_required
@@ -133,42 +136,100 @@ def update_trip_persons(request, trip_id):
         trip.persons.add(request.user)
     return redirect('/city/%s/1/1/' % trip.city.id)
 
-@login_required
-def update_like_country(request, object_id):
-    object_id = int(object_id)
-    try:
-        content_type_id = ContentType.objects.get_for_model(Country)
-        l = Like.objects.get(person_id=request.user.id, content_type=content_type_id, object_id=object_id).delete()
-        Country.objects.filter(id=object_id).update(likes_count=F('likes_count') - 1)
-    except:
-        l = Like(person_id=request.user.id, content_type=content_type_id, object_id=object_id, time=timezone.now())
-        Country.objects.filter(id=object_id).update(likes_count=F('likes_count') + 1)
-        l.save()
-    return redirect('/country/%s/1/' % object_id)
+# @login_required
+# def update_like_country(request, object_id):
+#     object_id = int(object_id)
+#     try:
+#         content_type_id = ContentType.objects.get_for_model(Country)
+#         l = Like.objects.get(person_id=request.user.id, content_type=content_type_id, object_id=object_id).delete()
+#         Country.objects.filter(id=object_id).update(likes_count=F('likes_count') - 1)
+#     except:
+#         l = Like(person_id=request.user.id, content_type=content_type_id, object_id=object_id, time=timezone.now())
+#         Country.objects.filter(id=object_id).update(likes_count=F('likes_count') + 1)
+#         l.save()
+#     return redirect('/country/%s/1/' % object_id)
 
+@csrf_exempt
 @login_required
-def update_like_city(request, object_id):
-    object_id = int(object_id)
-    try:
-        content_type_id = ContentType.objects.get_for_model(City)
-        l = Like.objects.get(person_id=request.user.id, content_type=content_type_id, object_id=object_id).delete()
-        City.objects.filter(id=object_id).update(likes_count=F('likes_count') - 1)
-    except:
-        l = Like(person_id=request.user.id, content_type=content_type_id, object_id=object_id, time=timezone.now())
-        City.objects.filter(id=object_id).update(likes_count=F('likes_count') + 1)
-        l.save()
-    return redirect('/city/%s/1/1/' % object_id)
+def update_like_country2(request):
+    if request.is_ajax():
+        object_id = int(request.POST.get('id'))
+        try:
+            content_type_id = ContentType.objects.get_for_model(Country)
+            l = Like.objects.get(person_id=request.user.id, content_type=content_type_id, object_id=object_id).delete()
+            Country.objects.filter(id=object_id).update(likes_count=F('likes_count') - 1)
+            is_liked = 0
+        except:
+            l = Like(person_id=request.user.id, content_type=content_type_id, object_id=object_id, time=timezone.now())
+            Country.objects.filter(id=object_id).update(likes_count=F('likes_count') + 1)
+            l.save()
+            is_liked = 1
+        json_data = json.dumps({'is_liked': is_liked,
+                                'likes_count': Country.objects.get(id=object_id).likes_count})
+        return HttpResponse(json_data, content_type='application/json')
+    return HttpResponseBadRequest()
 
+@csrf_exempt
 @login_required
-def update_like_person(request, object_id):
-    object_id = int(object_id)
-    try:
-        content_type_id = ContentType.objects.get_for_model(Person)
-        l = Like.objects.get(person_id=request.user.id, content_type=content_type_id, object_id=object_id).delete()
-    except:
-        l = Like(person_id=request.user.id, content_type=content_type_id, object_id=object_id, time=timezone.now())
-        l.save()
-    return redirect(reverse('Profile', args=(object_id,)))
+def update_like_city2(request):
+    if request.is_ajax():
+        object_id = int(request.POST.get('id'))
+        try:
+            content_type_id = ContentType.objects.get_for_model(City)
+            l = Like.objects.get(person_id=request.user.id, content_type=content_type_id, object_id=object_id).delete()
+            City.objects.filter(id=object_id).update(likes_count=F('likes_count') - 1)
+            is_liked = 0
+        except:
+            l = Like(person_id=request.user.id, content_type=content_type_id, object_id=object_id, time=timezone.now())
+            City.objects.filter(id=object_id).update(likes_count=F('likes_count') + 1)
+            l.save()
+            is_liked = 1
+        json_data = json.dumps({'is_liked': is_liked,
+                                'likes_count': City.objects.get(id=object_id).likes_count})
+        return HttpResponse(json_data, content_type='application/json')
+    return HttpResponseBadRequest()
+
+@csrf_exempt
+@login_required
+def update_like_person2(request):
+    if request.is_ajax():
+        object_id = int(request.POST.get('id'))
+        try:
+            content_type_id = ContentType.objects.get_for_model(Person)
+            l = Like.objects.get(person_id=request.user.id, content_type=content_type_id, object_id=object_id).delete()
+            is_liked = 0
+        except:
+            l = Like(person_id=request.user.id, content_type=content_type_id, object_id=object_id, time=timezone.now())
+            l.save()
+            is_liked = 1
+        json_data = json.dumps({'is_liked': is_liked,
+                                'likes_count': Person.objects.get(id=object_id).likes.count()})
+        return HttpResponse(json_data, content_type='application/json')
+    return HttpResponseBadRequest()
+
+# @login_required
+# def update_like_city(request, object_id):
+#     object_id = int(object_id)
+#     try:
+#         content_type_id = ContentType.objects.get_for_model(City)
+#         l = Like.objects.get(person_id=request.user.id, content_type=content_type_id, object_id=object_id).delete()
+#         City.objects.filter(id=object_id).update(likes_count=F('likes_count') - 1)
+#     except:
+#         l = Like(person_id=request.user.id, content_type=content_type_id, object_id=object_id, time=timezone.now())
+#         City.objects.filter(id=object_id).update(likes_count=F('likes_count') + 1)
+#         l.save()
+#     return redirect('/city/%s/1/1/' % object_id)
+
+# @login_required
+# def update_like_person(request, object_id):
+#     object_id = int(object_id)
+#     try:
+#         content_type_id = ContentType.objects.get_for_model(Person)
+#         l = Like.objects.get(person_id=request.user.id, content_type=content_type_id, object_id=object_id).delete()
+#     except:
+#         l = Like(person_id=request.user.id, content_type=content_type_id, object_id=object_id, time=timezone.now())
+#         l.save()
+#     return redirect(reverse('Profile', args=(object_id,)))
 
 def user_login(request):
     if request.method == 'POST':
@@ -239,7 +300,7 @@ def profile(request, person_id):
 def settings(request):
     person = request.user
     if request.method == 'POST':
-        form = SettingForm(request.POST, instance=person)
+        form = SettingForm(request.POST, request.FILES, instance=person)
         if form.is_valid():
             form.save()
             return redirect('/profile/%s/' % person.id)
@@ -298,9 +359,8 @@ def main(request):
     count = 10
     best_countries = Country.objects.all().order_by('-likes_count')[:count]
     best_cities = City.objects.all().order_by('-likes_count')[:count]
-    best_tags = Tag.objects.all().values('text').annotate(count_tags=Count('text')).order_by('-count_tags')[:5]
     return render(request, 'main.html', add_variables({'countries': best_countries,
-                            'cities': best_cities, 'tags': best_tags, 'req': request}, request))
+                            'cities': best_cities, 'req': request}, request))
 
 
 def registration(request):
@@ -405,3 +465,20 @@ def country(request, country_id, page):
         request, 'country.html', add_variables({'cities': cities, 'country': country,
                 'page': int(page), 'max_page': max_page, 'is_liked': is_liked}, request)
     )
+
+def autocomplete_tags(request):
+    if request.is_ajax():
+        word = request.GET.get('term', '')
+        tags = Tag.objects.filter(text__icontains = word)[:20]
+        results = []
+        for tag in tags:
+            tag_json = {}
+            tag_json['id'] = tag.id
+            tag_json['label'] = tag.text
+            tag_json['value'] = tag.text
+            results.append(tag_json)
+        data = json.dumps(results)
+    else:
+        data = 'fail'
+    mimetype = 'application/json'
+    return HttpResponse(data, mimetype)

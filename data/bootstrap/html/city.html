@@ -7,6 +7,7 @@
 <link href="{% static "css/comments.css" %}" rel="stylesheet">
 <link href="{% static "css/profile.css" %}" rel="stylesheet">
 <link href="{% static "css/trips.css" %}" rel="stylesheet">
+<script src="{% static "js/like.js" %}"></script>
 {% endblock %}
 
 {% block breadcrumb %}
@@ -27,12 +28,15 @@
 				<img class="media-object" src="{% static "images/spb.jpg" %}" id="main-pic" alt="">
 				<div class="row">
 					<div class = "buttons">
-						<a class="btn icon-btn btn-primary" href="/update_like_city/{{city.id}}">
-							{% if is_liked %}
-								<span class="glyphicon btn-glyphicon glyphicon-ok img-circle text-primary"><b>{{city.likes_count}}</b></span>
-							{% else %}
-								<span class="glyphicon btn-glyphicon glyphicon-thumbs-up img-circle text-primary"><b>{{city.likes_count}}</b></span>
-							{% endif %}
+						<a id="like_button_city" class="btn icon-btn btn-primary" data="{{city.id}}">
+							<span class="glyphicon btn-glyphicon img-circle text-primary">
+
+								<span class="glyphicon glyphicon-ok" id="liked_img"
+								{% if not is_liked %}style="display: none" {% endif %}></span>
+								<span class="glyphicon glyphicon-thumbs-up" id="not_liked_img"
+								{% if is_liked %}style="display: none" {% endif %}></span>
+								<b><span id="likes_count_text">{{city.likes_count}}</span></b>
+							</span>
 								Like
 						</a>
 						<a class="btn icon-btn btn-success" href="/update_add_cities/{{city.id}}/">

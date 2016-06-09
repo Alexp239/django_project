@@ -55,10 +55,10 @@
 						<li><a href="{% url 'Profile' 14286 %}">Контакты</a></li>
 					</ul>
 
-					<form class="navbar-search pull-right">
+					<!-- <form class="navbar-search pull-right">
 						<input type="text" class="search-query" placeholder="Search">
 						<button type="submit" class="btn" id ="search-btn"><i class="glyphicon glyphicon-search"></i></button>
-					</form>
+					</form> -->
 				</div><!-- /.navbar-collapse -->
 
 				{% block breadcrumb %}
@@ -85,7 +85,7 @@
                     <div class="profile-sidebar">
                         <!-- SIDEBAR USERPIC -->
                         <div class="profile-userpic">
-                            <img src="{% static "images/no_photo.jpg" %}" class="img-responsive" alt="">
+                            <img src="{{user.image.path}}" class="img-responsive" alt="">
                         </div>
                         <!-- END SIDEBAR USERPIC -->
                         <!-- SIDEBAR USER TITLE -->
@@ -143,9 +143,17 @@
 				{% endblock %}
 
 			</div>
-			<div class="col-sm-10">
+			<div class="col-sm-8">
 					{% block main_page %}
 					{% endblock %}
+			</div>
+            <div class="col-sm-2">
+                <h3 id="header-color">Популярные теги</h3>
+                <div id="text-main-color">
+                    {% for tag in best_tags %}
+                        <li>{{tag.text}}</li>
+                    {% endfor %}
+                </div>
 			</div>
 
 		</div>
