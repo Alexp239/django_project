@@ -1,6 +1,8 @@
 *~
 db.*
 my_site/media/
-.pyc
+*.pyc
 __*
 traveler/migrations/
+run/
+data/bootstrap/
