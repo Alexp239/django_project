@@ -22,7 +22,13 @@
 								<li class="left clearfix">
 									<span class="chat-img pull-left">
 										<a href="{% url 'Profile' pers.id %}">
-											<img src="{% static "images/no_photo.jpg" %}" alt="User Avatar" class="img-circle" width="50" height="50">
+											<img alt="User Avatar" class="img-circle" width="50" height="50"
+					                            {% if pers.image %}
+					                                src="{{pers.image.url}}"
+					                            {% else %}
+					                                src = "{% static "images/no_photo.jpg" %}"
+					                            {% endif %}
+					                            >
 										</a>
 									</span>
 									<div class="chat-body clearfix">

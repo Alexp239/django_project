@@ -24,8 +24,8 @@
 .profile-userpic img {
   float: none;
   margin: 0 auto;
-  width: 80%;
-  height: 80%;
+  width: 200px;
+  height: 200px;
   -webkit-border-radius: 50% !important;
   -moz-border-radius: 50% !important;
   border-radius: 50% !important;

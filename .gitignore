@@ -1,0 +1,6 @@
+*~
+db.*
+my_site/media/
+.pyc
+__*
+traveler/migrations/
